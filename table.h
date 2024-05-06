@@ -1,7 +1,7 @@
 #ifndef TABLE_H
 #define TABLE_H
 
-#include "eventype.h"
+#include "event.h"
 #include <QVector>
 #include <QMap>
 

@@ -10,14 +10,14 @@ CONFIG += c++17
 
 SOURCES += \
     clock.cpp \
-    eventype.cpp \
+    event.cpp \
     interface.cpp \
     main.cpp \
     table.cpp
 
 HEADERS += \
     clock.h \
-    eventype.h \
+    event.h \
     interface.h \
     table.h \
     ui_interface.h

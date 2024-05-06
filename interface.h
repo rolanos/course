@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include "clock.h"
-#include "eventype.h"
+#include "event.h"
 #include "table.h"
 #include <QThread>
 
