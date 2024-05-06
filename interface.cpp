@@ -32,7 +32,6 @@ void Interface::on_pushButton_clicked()
         types.clear();
         QTextStream in(&file);
         QString out = "";
-        bool i = !in.atEnd();
         while (!in.atEnd()) {
             QString line = in.readLine();
             line.remove(QChar(' '));
@@ -65,35 +64,30 @@ void Interface::updateState()
 void Interface::on_pushButton_2_clicked()
 {
     if (types.size() != 0) {
-        if (ui->pushButton_2 != nullptr) {
-            if (!ui->pushButton_2->isChecked()) {
-                ui->pushButton_2->setChecked(false);
-                ui->pushButton_2->setText("Завести будильник");
+        if (!ui->pushButton_2->isChecked()) {
+            ui->pushButton_2->setChecked(false);
+            ui->pushButton_2->setText("Завести будильник");
 
-                QVector<bool> v = {false, false, false, false, false};
-                cl->setState(v);
-                timer->stop();
-                schedule->clear();
-                QString out = "";
-                for (int i = 0; i < types.size(); ++i)
-                    out += types[i].name + " " + types[i].len.toString() + "\n";
-                ui->textEdit->setText(out);
-            }
+            QVector<bool> v = {false, false, false, false, false};
+            cl->setState(v);
+            timer->stop();
+            schedule->clear();
+            QString out = "";
+            for (int i = 0; i < types.size(); ++i)
+                out += types[i].name + " " + types[i].len.toString() + "\n";
+            ui->textEdit->setText(out);
         }
-    }
-    else {
-        if(ui->pushButton_2 != nullptr)
+        else {
             ui->pushButton_2->setText("Стоп");
-        if(ui->pushButton_2 != nullptr)
             ui->pushButton_2->setChecked(true);
-        if(schedule != nullptr)
             schedule->fillTable(types);
-        if(cl != nullptr)
+
             cl->setState(schedule->getState(QTime::currentTime()));
-        if(timer != nullptr)
+
             timer->start();
 
-        printTable();
+            printTable();
+        }
     }
 }
 

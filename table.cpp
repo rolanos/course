@@ -42,6 +42,8 @@ void Table::fillTable(QVector<EvenType> types)
 
 QVector<bool> Table::getState(QTime time)
 {
+
+
     QVector<bool> state(tipes.size());
     for (int i = 0; i < state.size(); ++i) state[i] = false;
     for (int i = 0; i < N; ++i) {
