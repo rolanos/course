@@ -19,8 +19,7 @@ HEADERS += \
     clock.h \
     event.h \
     interface.h \
-    table.h \
-    ui_interface.h
+    table.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

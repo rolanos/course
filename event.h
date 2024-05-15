@@ -4,22 +4,30 @@
 #include <QString>
 #include <QTime>
 
-class Event
-{
+class Event {
 public:
-    Event(QString, int);
+    Event(QString, QTime);
 
-    QString getName();
-    //в секундах
-    int duration;
     //Название события
     QString name;
+    //Время задержки
+    QTime duration;
+    //Индикатор того, было ли показано событие
+    bool isShown = false;
+};
+
+class ScheduledEvent : public Event
+{
+public:
+    //Полная инициализация по имени,
+    ScheduledEvent(QString, QTime, QTime, QTime);
+
     //Время начала события
     QTime start;
     //Время окончания актуальности события
     QTime end;
-    //Индикатор того, было ли показано событие
-    bool isShown;
+
+    void copyFromEvent(Event);
 };
 
 #endif // EVENTYPE_H

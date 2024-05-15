@@ -2,17 +2,15 @@
 #define INTERFACE_H
 
 #include <QWidget>
+#include <QThread>
+#include <QPushButton>
+
 #include "clock.h"
 #include "event.h"
 #include "table.h"
-#include <QThread>
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class Interface; }
-QT_END_NAMESPACE
 
-class Interface :
-                  public QWidget
+class Interface : public QWidget
 {
     Q_OBJECT
 
@@ -22,16 +20,15 @@ public:
 
     Clock* cl;
     Table* schedule;
-    QVector<EvenType> types;
+    QVector<Event> types;
+    QVector<ScheduledEvent> events;
     QTimer* timer;
+    QPushButton* pushButton_2;
+
 
 private slots:
     void on_pushButton_clicked();
     void updateState();
     void on_pushButton_2_clicked();
-    void printTable();
-
-private:
-    Ui::Interface *ui;
 };
 #endif // INTERFACE_H

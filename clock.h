@@ -12,18 +12,19 @@ class Clock : public QWidget
     Q_OBJECT
 public:
     explicit Clock(QWidget *parent = nullptr);
+    void setState(QVector<bool>);
 
 private:
     QTime* time;
     QTimer* timer;
     bool active();
-    QVector<Event> events;
+    QVector<ScheduledEvent> events;
 
     const int K = 5;
 
+
 protected:
     void paintEvent(QPaintEvent*) override;
-
 };
 
 #endif // CLOCK_H

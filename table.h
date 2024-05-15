@@ -4,15 +4,27 @@
 #include "event.h"
 #include <QVector>
 #include <QMap>
+#include <QPaintEvent>
+#include <QWidget>
+#include <QLabel>
 
-class Table
+class Table : public QWidget
 {
+    Q_OBJECT
 public:
-    Table();
-    QVector<Even> events;
-    QMap<QString, int> tipes;
-    void fillTable(QVector<EvenType>);
+    //Пустая таблица
+    explicit Table(QWidget* parent = nullptr);
+    //Деструктор
+    ~Table();
+    //Список наших событий
+    QVector<ScheduledEvent> events;
+    //Инициализация таблицы через метод
+    void initTable(QVector<Event>);
+    //Очистка таблицы
     void clear();
+    //Виджеты списка
+    QLabel* label;
+
     QVector<bool> getState(QTime);
 
 private:
@@ -20,6 +32,9 @@ private:
     const int N = 20;
     const int T1 = 2;
     const int T2 = 5;
+
+protected:
+    void paintEvent(QPaintEvent*) override;
 };
 
 #endif // TABLE_H
