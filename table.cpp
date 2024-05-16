@@ -77,6 +77,7 @@ void Table::clear() {
 
 void Table::clearAlerts() {
     scheduledEvents.clear();
+    actualEvents.clear();
 }
 
 

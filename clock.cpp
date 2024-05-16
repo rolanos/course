@@ -22,7 +22,7 @@ Clock::~Clock() {
     delete timer;
 }
 
-QVector<ScheduledEvent> Clock::getActualEvents() {
+QVector<ScheduledEvent> Clock::getActualEvents(QVector<ScheduledEvent> events) {
    *time = time->currentTime();
    QVector<ScheduledEvent> result;
    for(int i = 0; i < events.size(); i++) {

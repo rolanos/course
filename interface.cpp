@@ -96,7 +96,7 @@ void Interface::onChangeTimerStatus()
 
 void Interface::updateState()
 {
-    schedule->updateActuals(cl->getActualEvents());
+    schedule->updateActuals(cl->getActualEvents(schedule->scheduledEvents));
 }
 
 

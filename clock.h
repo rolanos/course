@@ -13,17 +13,13 @@ class Clock : public QWidget
 public:
     explicit Clock(QWidget *parent = nullptr);
 
-    //
-    QVector<ScheduledEvent> getActualEvents();
-
+    QVector<ScheduledEvent> getActualEvents(QVector<ScheduledEvent>);
 
     ~Clock();
 private:
     QTime* time;
 
     QTimer* timer;
-
-    QVector<ScheduledEvent> events;
 
     const int K = 5;
 
