@@ -29,9 +29,11 @@ Interface::Interface(QWidget *parent)
     startAlarm = new QPushButton("Запустить будильник", this);
     startAlarm->setGeometry(width * 0.07, height * 0.75, width * 0.4, height * 0.1);
     startAlarm->setStyleSheet("padding: 12px; border-radius: 10px; background-color: darkblue; color: white;");
+    startAlarm->setCheckable(true);
 
     connect(timer, SIGNAL(timeout()), this, SLOT(updateState()));
     connect(chooseFileButton, SIGNAL(pressed()), this, SLOT(onPushButtonFileClicked()));
+    connect(startAlarm, SIGNAL(pressed()), this, SLOT(onChangeTimerStatus()));
 }
 
 Interface::~Interface()
@@ -73,13 +75,29 @@ void Interface::onPushButtonFileClicked()
     }
 }
 
+void Interface::onChangeTimerStatus()
+{
+    if (types.size() != 0) {
+        if (schedule->scheduledEvents.isEmpty()) {
+            startAlarm->setText("Стоп");
+            schedule->fillAlertTable();
+            timer->start();
+            schedule->update();
+        }
+        else {
+            startAlarm->setText("Завести будильник");
+            schedule->clearAlerts();
+            timer->stop();
+            schedule->update();
+
+        }
+    }
+}
+
 void Interface::updateState()
 {
-    cl->setState(schedule->getState(QTime::currentTime()));
+    schedule->updateActuals(cl->getActualEvents());
 }
 
-void Interface::on_pushButton_2_clicked()
-{
 
-}
 

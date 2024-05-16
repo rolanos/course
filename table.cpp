@@ -9,11 +9,20 @@ Table::Table(QWidget *parent) : QWidget(parent)
     label->setReadOnly(true);
     label->setGeometry(720 * 0.5, 10, 720 * 0.4, 480 * 0.5);
     label->setAlignment(Qt::AlignTop);
-    label->setStyleSheet("font-size: 20px;");
+    label->setStyleSheet("font-size: 18px;");
+    label->setFrameShape(QFrame::NoFrame);
+
+    actualLabel = new QTextEdit(parent);
+    actualLabel->setReadOnly(true);
+    actualLabel->setGeometry(720 * 0.5, 480 * 0.6, 720 * 0.4, 480 * 0.3);
+    actualLabel->setAlignment(Qt::AlignTop);
+    actualLabel->setStyleSheet("font-size: 18px;");
+    actualLabel->setFrameShape(QFrame::NoFrame);
 }
 
 Table::~Table() {
     delete label;
+    delete actualLabel;
 }
 
 QTime Table::add(QTime t1, QTime t2)
@@ -35,46 +44,70 @@ QTime Table::add(QTime t1, QTime t2)
 
 void Table::initTable(QVector<Event> eventsBuffer)
 {
+    events = eventsBuffer;
+}
+
+void Table::fillAlertTable()
+{
+    clearAlerts();
     QTime startTime = QTime::currentTime();
     //Заводим генератор случайных чисел
     QRandomGenerator gen(QTime::currentTime().second());
     //Получаем случайное число от 0 до events.size() - 1
-    int randomIndex = gen.bounded(0, eventsBuffer.size());
+    int randomIndex = gen.bounded(0, events.size());
     //Добавляем первое событие в список таблицы
-    events.append(ScheduledEvent(eventsBuffer[randomIndex].name, eventsBuffer[randomIndex].duration, startTime , add(startTime, eventsBuffer[randomIndex].duration)));
+    scheduledEvents.append(ScheduledEvent(events[randomIndex].name, events[randomIndex].duration, startTime , add(startTime, events[randomIndex].duration)));
     //Добавляем оставшиеся 19 событий в список таблицы
     for (int i = 1; i < N; ++i) {
         startTime = add(startTime, QTime(0, 0, gen.bounded(T1, T2)));
-        randomIndex = gen.bounded(0, eventsBuffer.size());
-        events.append(ScheduledEvent(eventsBuffer[randomIndex].name, eventsBuffer[randomIndex].duration, startTime, add(startTime, eventsBuffer[randomIndex].duration)));
+        randomIndex = gen.bounded(0, events.size());
+        scheduledEvents.append(ScheduledEvent(events[randomIndex].name, events[randomIndex].duration, startTime, add(startTime, events[randomIndex].duration)));
     }
+}
+
+void Table::updateActuals(QVector<ScheduledEvent> actualBuffer)
+{
+    actualEvents = actualBuffer;
 }
 
 void Table::clear() {
     events.clear();
+    clearAlerts();
 }
 
-QVector<bool> Table::getState(QTime time)
-{
-    QVector<bool> state(events.size());
-    for (int i = 0; i < state.size(); ++i) state[i] = false;
-    for (int i = 0; i < N; ++i) {
-        if (time <= events[i].end && time >= events[i].start)
-            state[i] = true;
-    }
-    return state;
+void Table::clearAlerts() {
+    scheduledEvents.clear();
 }
 
 
 void Table::paintEvent(QPaintEvent*)
 {
-    QVector<ScheduledEvent>::iterator it = events.begin();
-    QString out = "Расписание событий\n";
+    QVector<ScheduledEvent>::iterator scheduledIterator = scheduledEvents.begin();
+    QVector<ScheduledEvent>::iterator actualIterator = actualEvents.begin();
 
-    while (it != events.end()) {
-        out += it->name + " " + it->start.toString() + " - " + it->end.toString() + "\n";
-        it++;
+    QString scheduledOut = "Расписание событий\n";
+    QString actualOut = "Актуальные события\n";
+
+    if(scheduledEvents.isEmpty()) {
+        QVector<Event>::iterator eventsIterator = events.begin();
+        while (eventsIterator != events.end()) {
+            scheduledOut += eventsIterator->name + " - " + eventsIterator->duration.toString() + "\n";
+            eventsIterator++;
+        }
     }
-    label->setText(out);
+    else {
+        while (scheduledIterator != scheduledEvents.end()) {
+            scheduledOut += scheduledIterator->name + " " + scheduledIterator->start.toString() + " - " + scheduledIterator->end.toString() + "\n";
+            scheduledIterator++;
+        }
+    }
+
+    while (actualIterator != actualEvents.end()) {
+        actualOut += actualIterator->name + " " + actualIterator->start.toString() + " - " + actualIterator->end.toString() + "\n";
+        actualIterator++;
+    }
+    label->setText(scheduledOut);
+    actualLabel->setText(actualOut);
+
 }
 

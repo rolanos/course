@@ -8,7 +8,7 @@ Clock::Clock(QWidget *parent) : QWidget(parent)
     setGeometry(0, 0, 330, 330);
 
     timer = new QTimer(this);
-    timer->setInterval(250);
+    timer->setInterval(500);
 
     time = new QTime();
     *time = time->currentTime();
@@ -17,21 +17,33 @@ Clock::Clock(QWidget *parent) : QWidget(parent)
     timer->start();
 }
 
-bool Clock::active() {
-    bool f = false;
-    for (int i = 0; i < events.size(); ++i) {
-        f |= events[i].isShown;
-    }
-    return f;
+Clock::~Clock() {
+    delete time;
+    delete timer;
 }
 
-void Clock::setState(QVector<bool> state) {
-    for (int i = 0; i < events.size(); ++i)
-        events[i].isShown = state[i];
+QVector<ScheduledEvent> Clock::getActualEvents() {
+   *time = time->currentTime();
+   QVector<ScheduledEvent> result;
+   for(int i = 0; i < events.size(); i++) {
+       if(isTimeBetween(events[i].start, events[i].end)){
+           result.append(events[i]);
+       }
+   }
+   return result;
+}
+
+bool Clock::isTimeBetween(QTime start, QTime end) {
+
+    int startSecs = start.secsTo(*time);
+    int endSecs = time->secsTo(end);
+
+    return startSecs >= 0 && endSecs >= 0;
 }
 
 void Clock::paintEvent(QPaintEvent*)
 {
+
     *time = time->currentTime();
 
     QPainter p;
@@ -93,27 +105,6 @@ void Clock::paintEvent(QPaintEvent*)
     p.setBrush(brush);
     p.setFont(QFont("Times", 18, 2, false));
     p.drawText(radius * 0.70, radius * 0.8, time->toString());
-
-    // int pos = 0, base = radius;
-    // for (int i = 0; i < events.size(); ++i) {
-    //     if (events[i].isShown) base -= 33;
-    // }
-    // for (int i = 0; i < events.size(); ++i) {
-    //     if (events[i].isShown) {
-    //         p.setPen(QPen(Qt::black));
-    //         p.setBrush(QBrush(Qt::black));
-    //         p.setOpacity(0.7);
-    //         p.drawRect(QRectF(0, base + pos*66, 330, 60));
-
-    //         p.setOpacity(1);
-    //         p.setPen(QPen(QColor("#9b0000")));
-    //         p.setBrush(QBrush(QColor("#0a40d6")));
-    //         p.setFont(QFont("Modern No.20", 32, 1, false));
-    //         p.drawText(QRectF(0, base + pos*66, 330, 60), events[i].name, QTextOption(Qt::AlignCenter));
-
-    //         pos++;
-    //     }
-    // }
 
     p.end();
 }

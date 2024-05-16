@@ -16,16 +16,27 @@ public:
     explicit Table(QWidget* parent = nullptr);
     //Деструктор
     ~Table();
+    //Список событий
+    QVector<Event> events;
+    //Список запланированных событий
+    QVector<ScheduledEvent> scheduledEvents;
     //Список наших событий
-    QVector<ScheduledEvent> events;
+    QVector<ScheduledEvent> actualEvents;
+    //Виджет списка событий
+    QTextEdit* label;
+    //Виджет списка актуальных событий
+    QTextEdit* actualLabel;
+
     //Инициализация таблицы через метод
     void initTable(QVector<Event>);
+    //Заполняем таблицу 20ю событиями
+    void fillAlertTable();
+    //Обновить актуальные события
+    void updateActuals(QVector<ScheduledEvent>);
     //Очистка таблицы
     void clear();
-    //Виджеты списка
-    QTextEdit* label;
-
-    QVector<bool> getState(QTime);
+    //Очистка таблицы с запланированными событиями
+    void clearAlerts();
 
 private:
     QTime add(QTime, QTime);

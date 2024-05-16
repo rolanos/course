@@ -13,7 +13,7 @@ public:
     //Время задержки
     QTime duration;
     //Индикатор того, было ли показано событие
-    bool isShown = false;
+    bool isActual = false;
 };
 
 class ScheduledEvent : public Event
