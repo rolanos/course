@@ -5,6 +5,8 @@
 Clock::Clock(QWidget *parent) : QWidget(parent)
 {
     setParent(parent);
+    setGeometry(0, 0, 330, 330);
+
     timer = new QTimer(this);
     timer->setInterval(250);
 
@@ -36,7 +38,7 @@ void Clock::paintEvent(QPaintEvent*)
     QPen pen = QPen(Qt::black);
     QBrush brush = QBrush(Qt::black);
 
-    double radius = 110;
+    double radius = 170;
 
     p.begin(this);
 

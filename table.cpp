@@ -5,12 +5,11 @@
 Table::Table(QWidget *parent) : QWidget(parent)
 {
     setParent(parent);
-    label = new QLabel(parent);
-    label->setGeometry(720 * 0.6, 10, 200, 480);
+    label = new QTextEdit(parent);
+    label->setReadOnly(true);
+    label->setGeometry(720 * 0.5, 10, 720 * 0.4, 480 * 0.5);
     label->setAlignment(Qt::AlignTop);
     label->setStyleSheet("font-size: 20px;");
-
-
 }
 
 Table::~Table() {
@@ -34,20 +33,20 @@ QTime Table::add(QTime t1, QTime t2)
     return QTime(h, min, sec);
 }
 
-void Table::initTable(QVector<Event> events)
+void Table::initTable(QVector<Event> eventsBuffer)
 {
     QTime startTime = QTime::currentTime();
     //Заводим генератор случайных чисел
     QRandomGenerator gen(QTime::currentTime().second());
     //Получаем случайное число от 0 до events.size() - 1
-    int randomIndex = gen.bounded(0, events.size());
+    int randomIndex = gen.bounded(0, eventsBuffer.size());
     //Добавляем первое событие в список таблицы
-    events.append(ScheduledEvent(events[randomIndex].name, events[randomIndex].duration, startTime ,add(startTime, events[randomIndex].duration)));
+    events.append(ScheduledEvent(eventsBuffer[randomIndex].name, eventsBuffer[randomIndex].duration, startTime , add(startTime, eventsBuffer[randomIndex].duration)));
     //Добавляем оставшиеся 19 событий в список таблицы
     for (int i = 1; i < N; ++i) {
         startTime = add(startTime, QTime(0, 0, gen.bounded(T1, T2)));
-        randomIndex = gen.bounded(0, events.size());
-        events.append(ScheduledEvent(events[randomIndex].name, events[randomIndex].duration, startTime, add(startTime, events[randomIndex].duration)));
+        randomIndex = gen.bounded(0, eventsBuffer.size());
+        events.append(ScheduledEvent(eventsBuffer[randomIndex].name, eventsBuffer[randomIndex].duration, startTime, add(startTime, eventsBuffer[randomIndex].duration)));
     }
 }
 
@@ -70,10 +69,10 @@ QVector<bool> Table::getState(QTime time)
 void Table::paintEvent(QPaintEvent*)
 {
     QVector<ScheduledEvent>::iterator it = events.begin();
-    QString out = "Наше расписание";
+    QString out = "Расписание событий\n";
 
     while (it != events.end()) {
-        out += it->name + " " + it->start.toString() + " " + it->end.toString() + "\n";
+        out += it->name + " " + it->start.toString() + " - " + it->end.toString() + "\n";
         it++;
     }
     label->setText(out);

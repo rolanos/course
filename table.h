@@ -6,7 +6,7 @@
 #include <QMap>
 #include <QPaintEvent>
 #include <QWidget>
-#include <QLabel>
+#include <QTextEdit>
 
 class Table : public QWidget
 {
@@ -23,7 +23,7 @@ public:
     //Очистка таблицы
     void clear();
     //Виджеты списка
-    QLabel* label;
+    QTextEdit* label;
 
     QVector<bool> getState(QTime);
 

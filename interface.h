@@ -23,11 +23,13 @@ public:
     QVector<Event> types;
     QVector<ScheduledEvent> events;
     QTimer* timer;
-    QPushButton* pushButton_2;
+
+    QPushButton* chooseFileButton;
+    QPushButton* startAlarm;
 
 
 private slots:
-    void on_pushButton_clicked();
+    void onPushButtonFileClicked();
     void updateState();
     void on_pushButton_2_clicked();
 };
