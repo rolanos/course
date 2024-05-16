@@ -11,6 +11,7 @@ Table::Table(QWidget *parent) : QWidget(parent)
     label->setAlignment(Qt::AlignTop);
     label->setStyleSheet("font-size: 18px;");
     label->setFrameShape(QFrame::NoFrame);
+    label->setText("Расписание событий:\n");
 
     actualLabel = new QTextEdit(parent);
     actualLabel->setReadOnly(true);
@@ -18,6 +19,7 @@ Table::Table(QWidget *parent) : QWidget(parent)
     actualLabel->setAlignment(Qt::AlignTop);
     actualLabel->setStyleSheet("font-size: 18px;");
     actualLabel->setFrameShape(QFrame::NoFrame);
+    actualLabel->setText("Актуальные события:\n");
 }
 
 Table::~Table() {
@@ -59,7 +61,8 @@ void Table::fillAlertTable()
     scheduledEvents.append(ScheduledEvent(events[randomIndex].name, events[randomIndex].duration, startTime , add(startTime, events[randomIndex].duration)));
     //Добавляем оставшиеся 19 событий в список таблицы
     for (int i = 1; i < N; ++i) {
-        startTime = add(startTime, QTime(0, 0, gen.bounded(T1, T2)));
+        // + 1 так как bounded захватывает только левую границу
+        startTime = add(startTime, QTime(0, 0, gen.bounded(T1, T2 + 1)));
         randomIndex = gen.bounded(0, events.size());
         scheduledEvents.append(ScheduledEvent(events[randomIndex].name, events[randomIndex].duration, startTime, add(startTime, events[randomIndex].duration)));
     }
@@ -86,8 +89,8 @@ void Table::paintEvent(QPaintEvent*)
     QVector<ScheduledEvent>::iterator scheduledIterator = scheduledEvents.begin();
     QVector<ScheduledEvent>::iterator actualIterator = actualEvents.begin();
 
-    QString scheduledOut = "Расписание событий\n";
-    QString actualOut = "Актуальные события\n";
+    QString scheduledOut = "Расписание событий:\n";
+    QString actualOut = "Актуальные события:\n";
 
     if(scheduledEvents.isEmpty()) {
         QVector<Event>::iterator eventsIterator = events.begin();
@@ -107,8 +110,12 @@ void Table::paintEvent(QPaintEvent*)
         actualOut += actualIterator->name + " " + actualIterator->start.toString() + " - " + actualIterator->end.toString() + "\n";
         actualIterator++;
     }
-    label->setText(scheduledOut);
-    actualLabel->setText(actualOut);
+    if(label->toPlainText() != scheduledOut) {
+        label->setText(scheduledOut);
+    }
+    if(actualLabel->toPlainText() != actualOut) {
+        actualLabel->setText(actualOut);
+    }
 
 }
 

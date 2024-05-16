@@ -63,11 +63,11 @@ void Interface::onPushButtonFileClicked()
 
             int sec = splitted.last().toInt();
 
-            QTime t(sec / 3600 % 24, sec / 60 % 60, sec % 60);
+            QTime time((sec / 3600) % 24, (sec / 60) % 60, sec % 60);
 
-            types.append(Event(name_type, t));
+            types.append(Event(name_type, time));
 
-            out += t.toString() + "\n";
+            out += time.toString() + "\n";
         }
 
         schedule->initTable(types);
