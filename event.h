@@ -12,14 +12,12 @@ public:
     QString name;
     //Время задержки
     QTime duration;
-    //Индикатор того, было ли показано событие
-    bool isActual = false;
 };
 
 class ScheduledEvent : public Event
 {
 public:
-    //Полная инициализация по имени,
+    //Полная инициализация
     ScheduledEvent(QString, QTime, QTime, QTime);
 
     //Время начала события

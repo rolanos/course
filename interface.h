@@ -18,19 +18,27 @@ public:
     Interface(QWidget *parent = nullptr);
     ~Interface();
 
-    Clock* cl;
-    Table* schedule;
+    //LOGIC
+    QTimer* timer;
+
+    //DATA
     QVector<Event> types;
     QVector<ScheduledEvent> events;
-    QTimer* timer;
+
+    //WIDGETS
+    Clock* cl;
+    Table* schedule;
 
     QPushButton* chooseFileButton;
     QPushButton* startAlarm;
 
 
 private slots:
+    //Callback выбор файла с конфигурацией
     void onPushButtonFileClicked();
+    //Callback при остановке/запуске таймера (timer)
     void onChangeTimerStatus();
+    //Callback при работе таймера в активном режиме обновляем состояние
     void updateState();
 };
 #endif // INTERFACE_H

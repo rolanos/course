@@ -21,8 +21,6 @@ private:
 
     QTimer* timer;
 
-    const int K = 5;
-
     //Определения time в промежутке. Если он между start и end - true, иначе - false
     bool isTimeBetween(QTime start, QTime end);
 

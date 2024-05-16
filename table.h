@@ -16,11 +16,11 @@ public:
     explicit Table(QWidget* parent = nullptr);
     //Деструктор
     ~Table();
-    //Список событий
+    //Список событий(инициализированных)
     QVector<Event> events;
-    //Список запланированных событий
+    //Список запланированных событий(N шт)
     QVector<ScheduledEvent> scheduledEvents;
-    //Список наших событий
+    //Список актуальных в данный момент событий
     QVector<ScheduledEvent> actualEvents;
     //Виджет списка событий
     QTextEdit* label;
@@ -39,9 +39,13 @@ public:
     void clearAlerts();
 
 private:
+    //Сложение двух объектов времен
     QTime add(QTime, QTime);
+    //Количество генерирующихся событий
     const int N = 20;
+    //от 2 сек
     const int T1 = 2;
+    //до 5 сек
     const int T2 = 5;
 
 protected:
